@@ -244,6 +244,9 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             transition: width 1.5s ease, transform 1.5s ease;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .wide-photo-card.slide-left {
@@ -254,7 +257,7 @@
         .wide-photo-card img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
         }
 
@@ -577,6 +580,96 @@
             padding: 20px;
         }
 
+        /* Thank You Message Section */
+        .thankyou-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            padding: 50px;
+            z-index: 999;
+        }
+
+        .thankyou-section.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .thankyou-text {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            position: absolute;
+        }
+
+        .thankyou-text.fade-in {
+            animation: fadeInStay 4s ease forwards;
+        }
+
+        .thankyou-text.fade-out {
+            animation: fadeOutQuick 1.5s ease forwards;
+        }
+
+        @keyframes fadeInStay {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            20%, 100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutQuick {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .thankyou-text.with-underline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .thankyou-text.with-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .thankyou-text.with-underline.animate-underline::after {
+            animation: expandUnderline 2s ease forwards;
+        }
+
+        @keyframes expandUnderline {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
         /* Music Control */
         .music-control {
             position: fixed;
@@ -673,11 +766,18 @@
         </div>
     </div>
 
+    <!-- Thank You Message Section -->
+    <div class="thankyou-section" id="thankyouSection">
+        <div class="thankyou-text" id="thankyouText1">Maaf yaa aku gabisa berhenti bilang terimakasih</div>
+        <div class="thankyou-text" id="thankyouText2">Sekali lagi</div>
+        <div class="thankyou-text with-underline" id="thankyouText3">Terimakasih Yaa Sayang</div>
+    </div>
+
     <!-- Spotify-Style Music Screen -->
     <div class="music-screen" id="musicScreen">
         <div class="music-content">
             <div class="album-art">
-                <img src="nanadihjpg.jpg" alt="Album Art" id="albumImg">
+                <img src="nadhif.jpg" alt="Album Art" id="albumImg">
             </div>
             <div class="song-details">
                 <div class="song-title">Kota ini Tak sama Tanpamu</div>
@@ -709,6 +809,10 @@
         const widePhotoCard = document.getElementById('widePhotoCard');
         const creditsContainer = document.getElementById('creditsContainer');
         const finalMessageSecond = document.getElementById('finalMessageSecond');
+        const thankyouSection = document.getElementById('thankyouSection');
+        const thankyouText1 = document.getElementById('thankyouText1');
+        const thankyouText2 = document.getElementById('thankyouText2');
+        const thankyouText3 = document.getElementById('thankyouText3');
         const musicScreen = document.getElementById('musicScreen');
         const musicControl = document.getElementById('musicControl');
         const bgMusic = document.getElementById('bgMusic');
@@ -888,7 +992,53 @@
                 // Show second final photo message (original style)
                 finalMessageSecond.style.display = 'flex';
                 finalMessageSecond.classList.add('show');
+                
+                // After 30 seconds, fade out final message and show thank you messages
+                setTimeout(() => {
+                    finalMessageSecond.classList.add('fade-out');
+                    setTimeout(() => {
+                        finalMessageSecond.style.display = 'none';
+                        // Start thank you message sequence
+                        startThankYouSequence();
+                    }, 3000);
+                }, 30000);
             }, 18000);
+        }
+
+        // Thank you message sequence
+        function startThankYouSequence() {
+            thankyouSection.classList.add('show');
+            
+            // First message: "Maaf yaa aku gabisa berhenti bilang terimakasih"
+            setTimeout(() => {
+                thankyouText1.classList.add('fade-in');
+            }, 500);
+            
+            // Fade out first message after 4 seconds
+            setTimeout(() => {
+                thankyouText1.classList.remove('fade-in');
+                thankyouText1.classList.add('fade-out');
+            }, 4500);
+            
+            // Second message: "Sekali lagi"
+            setTimeout(() => {
+                thankyouText2.classList.add('fade-in');
+            }, 6500);
+            
+            // Fade out second message
+            setTimeout(() => {
+                thankyouText2.classList.remove('fade-in');
+                thankyouText2.classList.add('fade-out');
+            }, 10500);
+            
+            // Third message: "Terimakasih Yaa Sayang" with underline
+            setTimeout(() => {
+                thankyouText3.classList.add('fade-in');
+                // Trigger underline animation
+                setTimeout(() => {
+                    thankyouText3.classList.add('animate-underline');
+                }, 800);
+            }, 12500);
         }
 
         // Music control
@@ -923,5 +1073,3 @@
     </script>
 </body>
 </html>
-
-
