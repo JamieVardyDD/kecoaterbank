@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, user-scalable=yes">
+    <title>Happy Valentine's Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Envelope Container */
+        .envelope-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease;
+        }
+
+        .envelope-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Envelope */
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border: 2px solid #ddd;
+            z-index: 1;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ffcccb;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            transform-origin: top center;
+            transition: transform 0.8s ease;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #ff9999;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff1744;
+            font-size: 48px;
+            z-index: 2;
+            animation: heartbeat 1.5s ease infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Text Container */
+        .text-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .message {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            position: absolute;
+            text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.3);
+            padding: 0 20px;
+        }
+
+        .message.show {
+            animation: fadeInOut 3s ease forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            15%, 85% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Gallery Container */
+        .gallery-container {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+            padding: 100px 0;
+            min-height: 100vh;
+        }
+
+        .gallery-container.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .gallery-container.fade-out {
+            animation: fadeOut 2s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* Final Message Section */
+        .final-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            padding: 50px;
+            z-index: 998;
+        }
+
+        .final-message.show {
+            animation: fadeIn 2s ease forwards;
+            pointer-events: all;
+        }
+
+        .final-message.fade-out {
+            animation: fadeOut 2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .final-content {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .final-photo {
+            width: 400px;
+            height: 500px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .final-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .final-text {
+            flex: 1;
+            color: #fff;
+        }
+
+        .final-text h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.3);
+            line-height: 1.3;
+        }
+
+        .final-text p {
+            font-size: 1.5rem;
+            line-height: 2;
+            text-shadow: 1px 1px 10px rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .heart-decoration {
+            font-size: 2rem;
+            margin-top: 30px;
+            animation: heartbeat 1.5s ease infinite;
+        }
+
+        /* Spotify-Style Music Screen */
+        .music-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            padding: 50px;
+            z-index: 997;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+        }
+
+        .music-screen.show {
+            animation: fadeIn 2s ease forwards;
+            pointer-events: all;
+        }
+
+        .music-screen.fade-out {
+            animation: fadeOut 2s ease forwards;
+        }
+
+        .music-content {
+            display: flex;
+            gap: 80px;
+            align-items: center;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .album-art {
+            width: 400px;
+            height: 400px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .album-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .song-details {
+            flex: 1;
+            color: #fff;
+        }
+
+        .song-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.3);
+            line-height: 1.2;
+        }
+
+        .artist-name {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+        }
+
+        .spotify-line {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spotify-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40%;
+            height: 100%;
+            background: #1db954;
+            border-radius: 3px;
+            animation: progressMove 3s ease-in-out infinite;
+        }
+
+        @keyframes progressMove {
+            0%, 100% {
+                width: 40%;
+            }
+            50% {
+                width: 70%;
+            }
+        }
+
+        .gallery-title {
+            text-align: center;
+            color: #fff;
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .cards-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .card-row {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1400px;
+            animation: slideUp 1s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-row {
+            animation-duration: 1.5s;
+        }
+
+        .photo-card {
+            width: 350px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Music Control */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .music-icon {
+            color: #fff;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Envelope -->
+    <div class="envelope-container" id="envelopeContainer">
+        <div class="envelope" id="envelope">
+            <div class="envelope-back"></div>
+            <div class="envelope-flap"></div>
+            <div class="envelope-front"></div>
+        </div>
+    </div>
+
+    <!-- Text Messages -->
+    <div class="text-container">
+        <div class="message" id="message1">Happy Valentine</div>
+        <div class="message" id="message2">Thank You For Choosing Me</div>
+        <div class="message" id="message3">Love You Always</div>
+        <div class="message" id="message4">23rd November 2025</div>
+        <div class="message" id="message5">I Will Always Remember You Forever</div>
+        <div class="message" id="message6">Love You Hanny</div>
+    </div>
+
+    <!-- Photo Gallery -->
+    <div class="gallery-container" id="gallery">
+        <h1 class="gallery-title">My Beautiful Girlfiend</h1>
+        <div class="cards-wrapper" id="cardsWrapper">
+            <!-- Cards will be added dynamically -->
+        </div>
+    </div>
+
+    <!-- Final Message -->
+    <div class="final-message" id="finalMessage">
+        <div class="final-content">
+            <div class="final-photo">
+                <img src="LUCUKKK.jpeg" alt="Our Special Moment" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="final-text">
+                <h2>My Dearest Love</h2>
+                <p>I am so grateful to have you in my life. Every moment with you is a blessing that I cherish deeply.</p>
+                <p>You hold such a special place in my heart, a place that no one else can ever fill. Your love has brought light into my darkest days and joy into my happiest moments.</p>
+                <p>Thank you for being you, for choosing me, and for making every day feel like Valentine's Day.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spotify-Style Music Screen -->
+    <div class="music-screen" id="musicScreen">
+        <div class="music-content">
+            <div class="album-art">
+                <img src="nadhif.jpg" alt="Album Art" id="albumImg">
+            </div>
+            <div class="song-details">
+                <div class="song-title">Kota ini Tak sama Tanpamu</div>
+                <div class="artist-name">Nadhif Basalamah</div>
+                <div class="spotify-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Control -->
+    <div class="music-control" id="musicControl">
+        <span class="music-icon">🔊</span>
+    </div>
+
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
+        <source src="forh4nny.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        const message1 = document.getElementById('message1');
+        const message2 = document.getElementById('message2');
+        const message3 = document.getElementById('message3');
+        const gallery = document.getElementById('gallery');
+        const cardsWrapper = document.getElementById('cardsWrapper');
+        const finalMessage = document.getElementById('finalMessage');
+        const musicScreen = document.getElementById('musicScreen');
+        const musicControl = document.getElementById('musicControl');
+        const bgMusic = document.getElementById('bgMusic');
+        let musicPlaying = false;
+
+        // Create photo cards (18 cards in 6 rows)
+        const cardImages = [
+            'img_28.jpeg',
+            'img_19.jpeg',
+            'img_3.jpeg',
+            'img_20.jpeg',
+            'img_5.jpeg',
+            'img_21.jpeg',
+            'img_7.jpeg',
+            'img_22.jpeg',
+            'img_9.jpeg',
+            'img_27.jpeg',
+            'img_23.jpeg',
+            'img_12.jpeg',
+            'img_24.jpeg',
+            'img_14.jpeg',
+            'img_25.jpeg',
+            'img_16.jpeg',
+            'img_26.jpeg',
+            'img_18.jpeg'
+        ];
+
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement('div');
+            row.className = 'card-row';
+            row.style.animationDelay = `${i * 0.5}s`;
+            
+            for (let j = 0; j < 3; j++) {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                const imgSrc = cardImages[i * 3 + j];
+                
+                // Create image element
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.alt = 'Memory ' + (i * 3 + j + 1);
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                
+                // Add error handler
+                img.onerror = function() {
+                    card.innerHTML = '<div class="photo-placeholder">Photo ' + (i * 3 + j + 1) + '</div>';
+                };
+                
+                card.appendChild(img);
+                row.appendChild(card);
+            }
+            
+            cardsWrapper.appendChild(row);
+        }
+
+        // Envelope click handler
+        envelope.addEventListener('click', () => {
+            envelope.classList.add('open');
+            
+            setTimeout(() => {
+                envelopeContainer.classList.add('hidden');
+                startMessageSequence();
+            }, 1000);
+        });
+
+        // Message sequence
+        function startMessageSequence() {
+            // Message 1 - appears at 0.5s, stays longer (4s total)
+            setTimeout(() => {
+                message1.classList.add('show');
+            }, 500);
+
+            // Message 2 - appears at 4.5s
+            setTimeout(() => {
+                message2.classList.add('show');
+            }, 4500);
+
+            // Message 3 - appears at 8.5s
+            setTimeout(() => {
+                message3.classList.add('show');
+            }, 8500);
+
+            // Show gallery and auto-scroll - starts at 12.5s
+            setTimeout(() => {
+                gallery.classList.add('show');
+                setTimeout(() => {
+                    autoScroll();
+                }, 500);
+            }, 12500);
+
+            // Fade out gallery and show final message - after scroll completes
+            setTimeout(() => {
+                gallery.classList.add('fade-out');
+                setTimeout(() => {
+                    gallery.style.display = 'none';
+                    window.scrollTo(0, 0);
+                    finalMessage.classList.add('show');
+                    
+                    // Fade out final message after 25 seconds and show music screen
+                    setTimeout(() => {
+                        finalMessage.classList.add('fade-out');
+                        setTimeout(() => {
+                            finalMessage.style.display = 'none';
+                            musicScreen.classList.add('show');
+                            
+                            // Start ending message sequence after music screen shows
+                            setTimeout(() => {
+                                startEndingSequence();
+                            }, 8000);
+                        }, 2000);
+                    }, 25000);
+                }, 2000);
+            }, 25000); // Increased time to allow for slower scroll
+        }
+
+        // Auto scroll function
+        function autoScroll() {
+            const scrollDuration = 8000; // Increased from 3000 to 8000ms for slower scroll
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const startTime = performance.now();
+
+            function scroll(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / scrollDuration, 1);
+                
+                window.scrollTo(0, scrollHeight * easeInOutQuad(progress));
+
+                if (progress < 1) {
+                    requestAnimationFrame(scroll);
+                }
+            }
+
+            requestAnimationFrame(scroll);
+        }
+
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
+        // Ending message sequence
+        function startEndingSequence() {
+            const message4 = document.getElementById('message4');
+            const message5 = document.getElementById('message5');
+            const message6 = document.getElementById('message6');
+
+            // Message 4 - date (fade out music screen when this appears)
+            setTimeout(() => {
+                musicScreen.classList.add('fade-out');
+                message4.classList.add('show');
+            }, 500);
+
+            // Message 5 - remember forever
+            setTimeout(() => {
+                message5.classList.add('show');
+            }, 4000);
+
+            // Message 6 - love you hanny
+            setTimeout(() => {
+                message6.classList.add('show');
+            }, 7500);
+
+            // After all messages have shown and faded, show final message with photo again
+            setTimeout(() => {
+                musicScreen.style.display = 'none';
+                // Reset the messages
+                message4.classList.remove('show');
+                message5.classList.remove('show');
+                message6.classList.remove('show');
+                // Show final photo message
+                finalMessage.style.display = 'flex';
+                finalMessage.classList.remove('fade-out');
+                finalMessage.classList.add('show');
+            }, 11000);
+        }
+
+        // Music control
+        musicControl.addEventListener('click', () => {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicControl.querySelector('.music-icon').textContent = '🔇';
+                musicPlaying = false;
+            } else {
+                bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                musicControl.querySelector('.music-icon').textContent = '🔊';
+                musicPlaying = true;
+            }
+        });
+
+        // Album art error handling
+        const albumImg = document.getElementById('albumImg');
+        if (albumImg) {
+            albumImg.onerror = function() {
+                this.parentElement.innerHTML = '<div class="album-placeholder">♪<br>Now Playing</div>';
+            };
+        }
+
+        // Auto-play music on first interaction
+        envelope.addEventListener('click', () => {
+            if (!musicPlaying) {
+                bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                musicControl.querySelector('.music-icon').textContent = '🔊';
+                musicPlaying = true;
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
