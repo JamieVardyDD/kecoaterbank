@@ -144,7 +144,7 @@
         }
 
         .message.show {
-            animation: fadeInOut 3s ease forwards;
+            animation: fadeInOut 5s ease forwards;
         }
 
         @keyframes fadeInOut {
@@ -177,7 +177,7 @@
         }
 
         .gallery-container.fade-out {
-            animation: fadeOut 2s ease forwards;
+            animation: fadeOut 3s ease forwards;
         }
 
         @keyframes fadeOut {
@@ -189,8 +189,133 @@
             }
         }
 
-        /* Final Message Section */
+        /* Final Message Section - Wide Photo Card with Credits */
         .final-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            padding: 50px;
+            z-index: 998;
+            overflow: hidden;
+        }
+
+        .final-message.show {
+            animation: fadeIn 3s ease forwards;
+            pointer-events: all;
+        }
+
+        .final-message.fade-out {
+            animation: fadeOut 3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .wide-photo-container {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            max-width: 1400px;
+            width: 100%;
+            height: 600px;
+            position: relative;
+        }
+
+        .wide-photo-card {
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transition: width 3s ease, transform 3s ease;
+            position: relative;
+        }
+
+        .wide-photo-card.slide-left {
+            width: 50%;
+            transform: translateX(0);
+        }
+
+        .wide-photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .credits-container {
+            width: 0;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0;
+            transition: width 3s ease, opacity 3s ease;
+            position: relative;
+            background: transparent;
+            display: flex;
+            align-items: flex-end;
+            padding: 40px;
+        }
+
+        .credits-container.show {
+            width: 50%;
+            opacity: 1;
+        }
+
+        .credits-text {
+            color: #fff;
+            font-size: 1.8rem;
+            line-height: 2.2;
+            text-align: left;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+            position: absolute;
+            bottom: 0;
+            left: 40px;
+            right: 40px;
+            animation: creditsScroll 45s linear forwards;
+            animation-play-state: paused;
+        }
+
+        .credits-container.show .credits-text {
+            animation-play-state: running;
+        }
+
+        @keyframes creditsScroll {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(-100%);
+            }
+        }
+
+        .credits-text p {
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .credits-text .signature {
+            margin-top: 60px;
+            font-style: italic;
+            font-size: 2.2rem;
+        }
+
+        /* Final Message Second (Original Style) */
+        .final-message-second {
             position: fixed;
             top: 0;
             left: 0;
@@ -205,22 +330,13 @@
             z-index: 998;
         }
 
-        .final-message.show {
-            animation: fadeIn 2s ease forwards;
+        .final-message-second.show {
+            animation: fadeIn 3s ease forwards;
             pointer-events: all;
         }
 
-        .final-message.fade-out {
-            animation: fadeOut 2s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .final-message-second.fade-out {
+            animation: fadeOut 3s ease forwards;
         }
 
         .final-content {
@@ -296,12 +412,12 @@
         }
 
         .music-screen.show {
-            animation: fadeIn 2s ease forwards;
+            animation: fadeIn 3s ease forwards;
             pointer-events: all;
         }
 
         .music-screen.fade-out {
-            animation: fadeOut 2s ease forwards;
+            animation: fadeOut 3s ease forwards;
         }
 
         .music-content {
@@ -519,17 +635,40 @@
         </div>
     </div>
 
-    <!-- Final Message -->
+    <!-- Final Message (First - Wide Photo Card with Credits) -->
     <div class="final-message" id="finalMessage">
+        <div class="wide-photo-container">
+            <div class="wide-photo-card" id="widePhotoCard">
+                <img src="img_2.jpeg" alt="Our Special Moment">
+            </div>
+            <div class="credits-container" id="creditsContainer">
+                <div class="credits-text">
+                    <p>Every day with you feels like a dream come true.</p>
+                    <p>I am so grateful to be your boyfriend, to wake up knowing that someone as beautiful, kind, and amazing as you chose me.</p>
+                    <p>You have brought so much light into my life, filling every moment with joy and meaning.</p>
+                    <p>I feel incredibly lucky to share this journey with you, to laugh with you, to grow with you, and to love you.</p>
+                    <p>Thank you for being exactly who you are, for your patience, your smile, and the way you make everything better just by being there.</p>
+                    <p>I promise to cherish every moment we have together and to always make you feel as special as you make me feel.</p>
+                    <p class="signature">Forever grateful,<br>Your boyfriend who loves you endlessly</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Message (Second - Original Style) -->
+    <div class="final-message-second" id="finalMessageSecond">
         <div class="final-content">
             <div class="final-photo">
                 <img src="LUCUKKK.jpeg" alt="Our Special Moment" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="final-text">
-                <h2>My Dearest Love</h2>
-                <p>I am so grateful to have you in my life. Every moment with you is a blessing that I cherish deeply.</p>
-                <p>You hold such a special place in my heart, a place that no one else can ever fill. Your love has brought light into my darkest days and joy into my happiest moments.</p>
-                <p>Thank you for being you, for choosing me, and for making every day feel like Valentine's Day.</p>
+                <h2>Thank You for Choosing Me</h2>
+                <p>Even though I'm not perfect, even though I'm not that smart, even though I make mistakes and have my flaws...</p>
+                <p>You still chose me. You saw something in me worth loving, and that means everything.</p>
+                <p>Thank you for accepting me exactly as I am, with all my imperfections and shortcomings.</p>
+                <p>Thank you for your patience when I don't understand things quickly, for your kindness when I stumble, and for your love that makes me want to be better every day.</p>
+                <p>I may not be the smartest or the most perfect person, but I promise you this - I will love you with everything I have, always try my best for you, and cherish you for the rest of my life.</p>
+                <p>Thank you for seeing the best in me, even when I can't see it myself. You make me feel worthy of love.</p>
             </div>
         </div>
     </div>
@@ -538,7 +677,7 @@
     <div class="music-screen" id="musicScreen">
         <div class="music-content">
             <div class="album-art">
-                <img src="nanadihjpg.jpg" alt="Album Art" id="albumImg">
+                <img src="nadhif.jpg" alt="Album Art" id="albumImg">
             </div>
             <div class="song-details">
                 <div class="song-title">Kota ini Tak sama Tanpamu</div>
@@ -567,6 +706,9 @@
         const gallery = document.getElementById('gallery');
         const cardsWrapper = document.getElementById('cardsWrapper');
         const finalMessage = document.getElementById('finalMessage');
+        const widePhotoCard = document.getElementById('widePhotoCard');
+        const creditsContainer = document.getElementById('creditsContainer');
+        const finalMessageSecond = document.getElementById('finalMessageSecond');
         const musicScreen = document.getElementById('musicScreen');
         const musicControl = document.getElementById('musicControl');
         const bgMusic = document.getElementById('bgMusic');
@@ -636,28 +778,28 @@
 
         // Message sequence
         function startMessageSequence() {
-            // Message 1 - appears at 0.5s, stays longer (4s total)
+            // Message 1 - appears at 0.5s, stays longer (5s total with slower animation)
             setTimeout(() => {
                 message1.classList.add('show');
             }, 500);
 
-            // Message 2 - appears at 4.5s
+            // Message 2 - appears at 6s (after message1 completes)
             setTimeout(() => {
                 message2.classList.add('show');
-            }, 4500);
+            }, 6000);
 
-            // Message 3 - appears at 8.5s
+            // Message 3 - appears at 12s
             setTimeout(() => {
                 message3.classList.add('show');
-            }, 8500);
+            }, 12000);
 
-            // Show gallery and auto-scroll - starts at 12.5s
+            // Show gallery and auto-scroll - starts at 18s
             setTimeout(() => {
                 gallery.classList.add('show');
                 setTimeout(() => {
                     autoScroll();
                 }, 500);
-            }, 12500);
+            }, 18000);
 
             // Fade out gallery and show final message - after scroll completes
             setTimeout(() => {
@@ -667,7 +809,13 @@
                     window.scrollTo(0, 0);
                     finalMessage.classList.add('show');
                     
-                    // Fade out final message after 25 seconds and show music screen
+                    // After 20 seconds, slide photo to left and show credits
+                    setTimeout(() => {
+                        widePhotoCard.classList.add('slide-left');
+                        creditsContainer.classList.add('show');
+                    }, 20000);
+                    
+                    // Wait for credits to finish (20s wait + 3s slide + 45s credits + 5s buffer = 73s total)
                     setTimeout(() => {
                         finalMessage.classList.add('fade-out');
                         setTimeout(() => {
@@ -677,11 +825,11 @@
                             // Start ending message sequence after music screen shows
                             setTimeout(() => {
                                 startEndingSequence();
-                            }, 8000);
-                        }, 2000);
-                    }, 25000);
-                }, 2000);
-            }, 25000); // Increased time to allow for slower scroll
+                            }, 12000);
+                        }, 3000);
+                    }, 73000);
+                }, 3000);
+            }, 30000);
         }
 
         // Auto scroll function
@@ -720,28 +868,27 @@
                 message4.classList.add('show');
             }, 500);
 
-            // Message 5 - remember forever
+            // Message 5 - remember forever (wait for message4 to complete - 5s)
             setTimeout(() => {
                 message5.classList.add('show');
-            }, 4000);
+            }, 6000);
 
-            // Message 6 - love you hanny
+            // Message 6 - love you hanny (wait for message5 to complete - 5s)
             setTimeout(() => {
                 message6.classList.add('show');
-            }, 7500);
+            }, 12000);
 
-            // After all messages have shown and faded, show final message with photo again
+            // After all messages have shown and faded, show second final message with original style
             setTimeout(() => {
                 musicScreen.style.display = 'none';
                 // Reset the messages
                 message4.classList.remove('show');
                 message5.classList.remove('show');
                 message6.classList.remove('show');
-                // Show final photo message
-                finalMessage.style.display = 'flex';
-                finalMessage.classList.remove('fade-out');
-                finalMessage.classList.add('show');
-            }, 11000);
+                // Show second final photo message (original style)
+                finalMessageSecond.style.display = 'flex';
+                finalMessageSecond.classList.add('show');
+            }, 18000);
         }
 
         // Music control
@@ -775,6 +922,4 @@
         }, { once: true });
     </script>
 </body>
-
 </html>
-
